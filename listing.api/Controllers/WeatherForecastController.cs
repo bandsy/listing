@@ -20,7 +20,8 @@ namespace listing.api.Controllers {
             "Hot",
             "Sweltering",
             "Scorching",
-            "Cunty"
+            "Cunty",
+            "Ur Mum"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
