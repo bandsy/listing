@@ -58,4 +58,4 @@ jobs:
       - name: Install helm
         run: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod 700 get_helm.sh && ./get_helm.sh
       - name: Update deployment
-        run: helm upgrade web-api-template ./chart --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig --namespace develop --set-string sha=${{ github.sha }}
+        run: helm upgrade listing ./chart --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig --namespace develop --set-string sha=${{ github.sha }}
