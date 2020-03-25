@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: { { .Release.Name } }
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: { { .Release.Name } }
+  template:
+    metadata:
+      labels:
+        app: { { .Release.Name } }
+      annotations:
+        sha: { { .Values.sha } }
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: { { .Release.Name } }
+          image: docker.pkg.github.com/bandsy/{{ .Release.Name }}/{{ .Release.Name }}-develop:latest
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+          # env:
+          # - name: MONGO_USERNAME
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: MONGO_USERNAME
+          #       name: {{ .Release.Name }}-auth
+          # - name: MONGO_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: MONGO_PASSWORD
+          #       name: {{ .Release.Name }}-auth
+          # - name: MONGO_HOSTNAME
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: MONGO_HOSTNAME
+          #       name: {{ .Release.Name }}-config
+          # - name: MONGO_PORT
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: MONGO_PORT
+          #       name: {{ .Release.Name }}-config
+          # - name: MONGO_DB
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: MONGO_DB
+          #       name: {{ .Release.Name }}-config
+          # - name: MONGO_REPLICASET
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: MONGO_REPLICASET
+          #       name: {{ .Release.Name }}-config
+          # - name: PGUSER
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: PGUSER
+          #       name: {{ .Release.Name }}-auth
+          # - name: PGPASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: PGPASSWORD
+          #       name: {{ .Release.Name }}-auth
+          # - name: PGHOST
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: PGHOST
+          #       name: {{ .Release.Name }}-config
+          # - name: PGPORT
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: PGPORT
+          #       name: {{ .Release.Name }}-config
+          # - name: PGDATABASE
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: PGDATABASE
+          #       name: {{ .Release.Name }}-config
